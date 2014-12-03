@@ -2532,9 +2532,9 @@ class BasePipeline(object):
                 raise r
 
     def annotate_exception(self, exception, number, command):
-        cmd = unicode(' ').join(imap(unicode, command))
-        msg = unicode('Command # %d (%s) of pipeline caused error: %s') % (
-            number, cmd, unicode(exception.args[0]))
+        cmd = unicode(' ', errors='replace').join([unicode(str(c), errors='replace') for c in command])
+        msg = unicode('Command # %d (%s) of pipeline caused error: %s', errors='replace') % (
+            number, cmd, unicode(exception.args[0], errors='replace'))
         exception.args = (msg,) + exception.args[1:]
 
     def parse_response(self, connection, command_name, **options):
